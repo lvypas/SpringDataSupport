@@ -1,7 +1,5 @@
 package org.lvypas.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -12,13 +10,17 @@ import org.lvypas.model.Circle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Component;
 
 @Component
 public class JdbcDaoImpl {
 
     private DataSource dataSource;
-    private JdbcTemplate jdbcTemplete = new JdbcTemplate();
+    private JdbcTemplate jdbcTemplete;
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;    
 
     public DataSource getDataSource() {
         return dataSource;
@@ -27,6 +29,7 @@ public class JdbcDaoImpl {
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplete = new JdbcTemplate(dataSource);
+        this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
     public JdbcTemplate getJdbcTemplete() {
@@ -90,8 +93,9 @@ public class JdbcDaoImpl {
     }
     
     public void insertCircle(Circle circle) {
-        String sql = "INSERT INTO CIRCLE (ID, NAME1) VALUES (?,?)";
-        jdbcTemplete.update(sql, new Object[] {circle.getId(), circle.getName()});
+        String sql = "INSERT INTO CIRCLE (ID, NAME1) VALUES (:id, :name)";
+        SqlParameterSource namedParameters = new MapSqlParameterSource("id", circle.getId()).addValue("name", circle.getName());
+        namedParameterJdbcTemplate.update(sql, namedParameters);
     }
     
     public void createTriangleTable() {
