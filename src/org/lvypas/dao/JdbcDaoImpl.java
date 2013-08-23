@@ -70,5 +70,11 @@ public class JdbcDaoImpl {
         String sql = "SELECT COUNT(*) FROM CIRCLE";
         return jdbcTemplete.queryForInt(sql);
     }
+    
+    public String getCircleName(int circleId) {
+        String sql = "SELECT NAME1 FROM CIRCLE WHERE ID = ?";
+        return jdbcTemplete.queryForObject(sql, new Object[] {circleId}, String.class);       
+        
+    }    
 
 }
