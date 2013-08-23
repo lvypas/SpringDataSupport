@@ -1,6 +1,7 @@
 package org.lvypas;
 
 import org.lvypas.dao.JdbcDaoImpl;
+import org.lvypas.model.Circle;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -11,7 +12,9 @@ public class JdbcDemo {
         ApplicationContext ctx = new ClassPathXmlApplicationContext(
                 "spring.xml");
         JdbcDaoImpl dao = ctx.getBean("jdbcDaoImpl", JdbcDaoImpl.class);
-        System.out.println(dao.getAllCircles().size());
+        //dao.insertCircle(new Circle(3, "Third Circle"));
+        //System.out.println(dao.getAllCircles().size());
+        dao.createTriangleTable();
 
     }
 
